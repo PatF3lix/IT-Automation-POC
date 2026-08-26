@@ -11,6 +11,8 @@ DATABASE_DIR = BASE_DIR / "data"
 DATABASE_FILE = DATABASE_DIR / "automation.db"
 SCHEMA_FILE = Path(__file__).resolve().parent / "schema.sql"
 
+
+
 def get_connection():
     DATABASE_DIR.mkdir(exist_ok=True)
     connection = sqlite3.connect(DATABASE_FILE)
@@ -32,6 +34,8 @@ def initialize_database():
 
     connection.commit()
     connection.close()
+
+######################################### Employees #########################################
 
 def create_employee(first_name, last_name, department, job_title, manager, start_date):
     connection = get_connection()
@@ -111,28 +115,44 @@ def delete_employee(employee_id):
     connection.commit()
     connection.close()
 
+######################################### Tickets #########################################
+
+
+
+
+
 if __name__ == "__main__":
     initialize_database()
 
+    # create_employee("John", "Doe", "IT", "System Administrator", "Jane Doe", "2026-09-01")
+    # create_employee("Jane", "Smith", "IT", "Programmeur", "John Doe", "2026-09-02")
 
+    # print("Employee created")
+
+    # employee = get_employee(1)
+    # if employee is not None:
+    #     print(employee["first_name"])
+    #     print(employee["last_name"])
+    #     print(employee["department"])
+    #     print(employee["job_title"])
+    # else:
+    #     print("No employee with that id was found")
+
+    # employee = get_employee(2)
+    # if employee is not None:
+    #     print(employee["first_name"])
+    #     print(employee["last_name"])
+    #     print(employee["department"])
+    #     print(employee["job_title"])
+    # else:
+    #     print("No employee with that id was found")
 
     # update_result = update_employee(1, {"department": "Cybersecurity",
     #                                     "job_title": "Security Analyst"})
 
     # print("Update successful:", update_result)
 
-    delete_employee(1)
+    # delete_employee(1)
 
-    employee = get_employee(1)
-    if employee is not None:
-        print(employee["first_name"])
-        print(employee["last_name"])
-        print(employee["department"])
-        print(employee["job_title"])
-    else:
-        print("No employee with that id was found")
 
-    # create_employee("John", "Doe", "IT", "System Administrator", "Jane Doe", "2026-09-01")
-    # print("Employee created")
-
-    # print(f"Database initialized: {DATABASE_FILE}")
+    print(f"Database initialized: {DATABASE_FILE}")
