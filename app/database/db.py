@@ -117,7 +117,26 @@ def delete_employee(employee_id):
 
 ######################################### Tickets #########################################
 
+def create_ticket(ticket_number, employee_id, title, description):
+    connection = get_connection()
 
+    query_result = connection.execute(
+        """
+        INSERT INTO tickets
+        (ticket_number, employee_id, title, description)
+        VALUES (?, ?, ?, ?)
+        """,
+        (ticket_number, employee_id, title, description)
+    )
+
+    connection.commit()
+
+    # return the id of the row just inserted
+    ticket_id = query_result.lastrowid
+
+    connection.close()
+
+    return ticket_id
 
 
 

@@ -1,5 +1,5 @@
-from flask import Flask, jsonify
-from .database.db import get_employee
+from flask import Flask, jsonify, request
+from .database.db import get_employee, create_ticket
 
 app = Flask(__name__)
 
@@ -23,7 +23,22 @@ def employee(employee_id):
         "job_title": employee["job_title"]
     })
 
+@app.route("/tickets", methods=["POST"])
+def create_new_ticket():
 
+    data = request.get_json()
+
+    ticket_id = create_ticket(
+        data["ticket_number"],
+        data["employee_id"],
+        data["title"],
+        data["description"]
+    )
+
+    return jsonify ({
+        "message": "Ticket created",
+        "ticket_id": ticket_id
+    }), 201
 
 
 if __name__ == "__main__":
