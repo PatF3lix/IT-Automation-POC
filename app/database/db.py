@@ -45,9 +45,33 @@ def create_employee(first_name, last_name, department, job_title, manager, start
     connection.commit()
     connection.close()
 
+def get_employee(employee_id):
+    connection = get_connection()
+
+    query_result = connection.execute("SELECT * FROM employees WHERE id = ?",
+                       (employee_id,)
+    )
+
+    # fetchone() takes the result of your SQL query and retrieves the first matching row.
+    employee = query_result.fetchone()
+
+    connection.close()
+
+    return employee
+
 if __name__ == "__main__":
     initialize_database()
 
-    create_employee("John", "Doe", "IT", "System Administrator", "Jane Doe", "2026-09-01")
-    print("Employee created")
+    employee = get_employee(999)
+    if employee is not None:
+        print(employee["first_name"])
+        print(employee["last_name"])
+        print(employee["department"])
+        print(employee["job_title"])
+    else:
+        print("No employee with that id was found")
+
+    # create_employee("John", "Doe", "IT", "System Administrator", "Jane Doe", "2026-09-01")
+    # print("Employee created")
+
     # print(f"Database initialized: {DATABASE_FILE}")
