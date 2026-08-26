@@ -11,7 +11,6 @@ DATABASE_DIR = BASE_DIR / "data"
 DATABASE_FILE = DATABASE_DIR / "automation.db"
 SCHEMA_FILE = Path(__file__).resolve().parent / "schema.sql"
 
-# Gives us a connection to the SQLite database
 def get_connection():
     DATABASE_DIR.mkdir(exist_ok=True)
     connection = sqlite3.connect(DATABASE_FILE)
@@ -59,10 +58,72 @@ def get_employee(employee_id):
 
     return employee
 
+def update_employee(employee_id, updates):
+    connection = get_connection()
+
+    allowed_fields = {
+        "first_name",
+        "last_name",
+        "department",
+        "job_title",
+        "manager",
+        "start_date",
+        "status"
+    }
+
+    # Only allow fields that actually exist in the employee table
+    updates = {
+        field: value
+        for field, value in updates.items()
+        if field in allowed_fields
+    }
+
+    if not updates:
+        connection.close()
+        return False
+
+    set_clause = ", ".join(
+        f"{field} = ?" for field in updates
+    )
+
+    query = f"""
+        UPDATE employees
+        SET {set_clause}
+        WHERE id = ?
+    """
+
+    values = tuple(updates.values()) + (employee_id,)
+
+    connection.execute(query, values)
+    connection.commit()
+    connection.close()
+
+    return True
+
+def delete_employee(employee_id):
+    connection = get_connection()
+
+    connection.execute(
+        "DELETE FROM employees Where id = ?",
+        (employee_id,)
+    )
+
+    connection.commit()
+    connection.close()
+
 if __name__ == "__main__":
     initialize_database()
 
-    employee = get_employee(999)
+
+
+    # update_result = update_employee(1, {"department": "Cybersecurity",
+    #                                     "job_title": "Security Analyst"})
+
+    # print("Update successful:", update_result)
+
+    delete_employee(1)
+
+    employee = get_employee(1)
     if employee is not None:
         print(employee["first_name"])
         print(employee["last_name"])
