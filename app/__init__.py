@@ -10,7 +10,7 @@ def home():
     return "IT Automation POC is running!"
 
 @app.route("/employees/<int:employee_id>")
-def employee(employee_id):
+def get_employee_route(employee_id):
     employee = get_employee(employee_id)
 
     if employee is None:
@@ -51,5 +51,24 @@ def create_new_ticket():
     "ai_recommendations": json.loads(ticket["ai_recommendations"])
     }), 201
 
+@app.route("/tickets/<int:ticket_id>")
+def get_ticket_route(ticket_id):
+    ticket = get_ticket(ticket_id)
+
+    if ticket is None:
+        return jsonify({"error": "Ticket not found"}), 404
+
+    return jsonify({
+        "id": ticket["id"],
+        "ticket_number": ticket["ticket_number"],
+        "title": ticket["title"],
+        "description": ticket["description"],
+        "category": ticket["category"],
+        "priority": ticket["priority"],
+        "assigned_team": ticket["assigned_team"],
+        "ai_summary": ticket["ai_summary"],
+        "ai_recommendations": json.loads(ticket["ai_recommendations"])
+        })
+    
 if __name__ == "__main__":
     app.run(debug=True)
