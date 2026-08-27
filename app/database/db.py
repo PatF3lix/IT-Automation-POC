@@ -170,6 +170,10 @@ def update_ticket(ticket_id, updates):
         if field in allowed_fields
     }
 
+    if not updates:
+        connection.close()
+        return False
+
     set_clause = ", ".join(
         f"{field} = ?" for field in updates
     )
@@ -230,9 +234,126 @@ def delete_ticket(ticket_id):
 
     return ticket_deleted
 
+
+######################################### IT Assets #########################################
+
+def create_asset(asset_tag, asset_type, manufacturer, serial_number, assigned_to, purchase_date, warranty_end):
+    connection = get_connection()
+
+    query_result = connection.execute(
+        """
+        INSERT INTO assets
+        (asset_tag, asset_type, manufacturer, serial_number, assigned_to, purchase_date, warranty_end)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        (asset_tag, asset_type, manufacturer, serial_number, assigned_to, purchase_date, warranty_end)
+    )
+
+    connection.commit()
+
+    asset_id = query_result.lastrowid
+
+    connection.close()
+
+    return asset_id
+
+
+def get_asset(asset_id):
+    connection = get_connection()
+
+    query_result = connection.execute(
+        "SELECT * FROM assets WHERE id = ?",
+        (asset_id, )
+    )
+
+    asset = query_result.fetchone()
+
+    connection.close()
+
+    return asset
+
+def update_asset(asset_id, updates):
+
+    connection = get_connection()
+
+    allowed_fields = {
+        "asset_tag",
+        "asset_type",
+        "manufacturer",
+        "serial_number",
+        "status",
+        "assigned_to",
+        "purchase_date",
+        "warranty_end"
+    }
+
+    updates = {
+        field: value
+        for field, value in updates.items()
+        if field in allowed_fields
+    }
+
+    if not updates:
+        connection.close()
+        return False
+
+    set_clause = ", ".join(
+        f"{field} = ?" for field in updates
+    )
+
+    query = f"""
+            UPDATE assets
+            SET {set_clause}
+            WHERE id = ?
+        """
+
+    values = tuple(updates.values()) + (asset_id,)
+
+    connection.execute(query, values)
+    connection.commit()
+    connection.close()
+
+    return True
+
+def delete_asset(asset_id):
+    connection = get_connection()
+
+    query_result = connection.execute(
+        "DELETE FROM assets WHERE id = ?",
+                       (asset_id, )
+        )
+
+    connection.commit()
+
+    asset_deleted = query_result.rowcount > 0
+
+    connection.close()
+
+    return asset_deleted 
+
 if __name__ == "__main__":
     initialize_database()
     print(f"Database initialized: {DATABASE_FILE}")
+
+    # asset_id = create_asset(
+    # "LAP-001",
+    # "Laptop",
+    # "Dell",
+    # "DL123456",
+    # None,
+    # "2026-08-27",
+    # "2029-08-27"
+    # )
+
+    asset = get_asset(1)
+
+    if asset:
+        print("Asset:", dict(asset))
+    else:
+        print("Asset not found")
+
+
+#     print("Asset created:", asset_id)
 
     # ticket = get_ticket(1)
 
