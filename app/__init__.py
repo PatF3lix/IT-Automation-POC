@@ -30,7 +30,7 @@ def get_employee_route(employee_id):
     employee = get_employee(employee_id)
 
     if employee is None:
-        return jsonify({"error": "Employee not found"}), 404
+        return jsonify({"error": "Employee not found"}, 404)
 
     return jsonify({
         "id": employee["id"],
@@ -38,6 +38,16 @@ def get_employee_route(employee_id):
         "last_name": employee["last_name"],
         "department": employee["department"],
         "job_title": employee["job_title"]
+    })
+
+@app.route("/employees/<int:employee_id>/assets")
+def get_employee_assets_route(employee_id):
+
+    employee_assets = get_employee_assets(employee_id)
+
+    return jsonify({
+        "employee_id": employee_id,
+        "assets": [dict(asset) for asset in employee_assets]
     })
 
 ######################################### API Tickets Routes #################################
@@ -233,7 +243,53 @@ def delete_asset_route(asset_id):
             "warranty_end": asset["warranty_end"],
             })
 
-@app.route("")
+@app.route("/assets/<int:asset_id>/assign", methods=["POST"])
+def assign_asset_route(asset_id):
+
+    data = request.get_json()
+    employee_id = data["employee_id"]
+
+    asset_assigned = assign_asset(asset_id, employee_id)
+
+    if not asset_assigned:
+        return jsonify({"error": "Asset could not be assigned"}), 404
+
+    asset = get_asset(asset_id)
+
+    return jsonify({
+                "id": asset["id"],
+                "asset_tag": asset["asset_tag"],
+                "asset_type": asset["asset_type"],
+                "manufacturer": asset["manufacturer"],
+                "serial_number": asset["serial_number"],
+                "status": asset["status"],
+                "assigned_to": asset["assigned_to"],
+                "purchase_date": asset["purchase_date"],
+                "warranty_end": asset["warranty_end"],
+                })
+
+@app.route("/assets/<int:asset_id>/return", methods=["POST"])
+def return_asset_route(asset_id):
+
+    asset_returned = return_asset(asset_id)
+
+    if not asset_returned:
+        return jsonify({"Error": "Asset could not be returned"})
+
+    asset = get_asset(asset_id)
+
+    return jsonify({
+        "id": asset["id"],
+        "asset_tag": asset["asset_tag"],
+        "asset_type": asset["asset_type"],
+        "manufacturer": asset["manufacturer"],
+        "serial_number": asset["serial_number"],
+        "status": asset["status"],
+        "assigned_to": asset["assigned_to"],
+        "purchase_date": asset["purchase_date"],
+        "warranty_end": asset["warranty_end"],
+    })
+
 
 if __name__ == "__main__":
     app.run(debug=True)
