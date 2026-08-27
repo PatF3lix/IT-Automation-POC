@@ -1,5 +1,7 @@
 import json
 from flask import Flask, jsonify, request
+from .services.ticket_service import process_ticket
+from .services.asset_service import assign_asset, return_asset
 from .database.db import (
     get_employee,
     create_ticket,
@@ -12,8 +14,12 @@ from .database.db import (
     delete_asset,
     get_employee_assets
 )
-from .services.ticket_service import process_ticket
-from .services.asset_service import assign_asset, return_asset
+from .services.onboarding_service import (
+    start_onboarding,
+    get_onboarding_details,
+    update_task,
+    complete_onboarding
+)
 
 app = Flask(__name__)
 
@@ -30,7 +36,7 @@ def get_employee_route(employee_id):
     employee = get_employee(employee_id)
 
     if employee is None:
-        return jsonify({"error": "Employee not found"}, 404)
+        return jsonify({"error": "Employee not found"}), 404
 
     return jsonify({
         "id": employee["id"],
@@ -49,6 +55,18 @@ def get_employee_assets_route(employee_id):
         "employee_id": employee_id,
         "assets": [dict(asset) for asset in employee_assets]
     })
+
+@app.route("/employees/<int:employee_id>/onboarding", methods=["POST"])
+def start_employee_onboarding(employee_id):
+
+    onboarding_id = start_onboarding(employee_id)
+
+    if not onboarding_id:
+        return jsonify({"error": "Employee not found"}), 404
+
+    onboarding = get_onboarding_details(onboarding_id)
+
+    return jsonify(onboarding), 201
 
 ######################################### API Tickets Routes #################################
 
@@ -274,7 +292,7 @@ def return_asset_route(asset_id):
     asset_returned = return_asset(asset_id)
 
     if not asset_returned:
-        return jsonify({"Error": "Asset could not be returned"})
+        return jsonify({"Error": "Asset could not be returned"}), 404
 
     asset = get_asset(asset_id)
 
@@ -290,6 +308,48 @@ def return_asset_route(asset_id):
         "warranty_end": asset["warranty_end"],
     })
 
+######################################### API ONBOARDING Routes #################################
+
+@app.route("/onboardings/<int:onboarding_id>")
+def get_onboarding_route(onboarding_id):
+
+    onboarding = get_onboarding_details(onboarding_id)
+
+    if not onboarding:
+        return jsonify({"error": "Onboarding not found"}), 404
+
+    return jsonify(onboarding)
+
+@app.route("/onboarding/tasks/<int:task_id>", methods=["PUT"])
+def update_onboarding_task_route(task_id):
+
+    data = request.get_json()
+
+    task_updated = update_task(task_id, data)
+
+    if not task_updated:
+        return jsonify({
+            "error": "Task not found or no valid fields provided"
+        }), 404
+
+    return jsonify({
+        "message":  "Task updated",
+        "task_id": task_id
+    })
+
+@app.route("/onboardings/<int:onboarding_id>/complete", methods=["POST"])
+def complete_onboarding_route(onboarding_id):
+
+    onboarding_completed = complete_onboarding(onboarding_id)
+
+    if not onboarding_completed:
+        return jsonify({
+            "error": "Onboarding cannot be completed. All tasks must be completed"
+        }), 400
+
+    onboarding = get_onboarding_details(onboarding_id)
+
+    return jsonify(onboarding)
 
 if __name__ == "__main__":
     app.run(debug=True)
