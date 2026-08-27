@@ -1,119 +1,77 @@
+from datetime import datetime
+from ..database.db import (
+    get_employee,
+    create_onboarding,
+    get_onboarding,
+    create_onboarding_task,
+    get_onboarding_tasks,
+    update_onboarding,
+    update_onboarding_task
+)
 
-
-def create_onboarding(employee_id):
+def start_onboarding(employee_id):
     employee = get_employee(employee_id)
 
     if not employee:
         return False
 
-    connection = get_connection()
+    onboarding_id = create_onboarding(employee_id)
 
-    query_result = connection.execute(
-        """
-        INSERT INTO onboardings (employee_id)
-        VALUES (?)
-        """,
-        (employee_id, )
-    )
+    tasks = [
+        ("Create AD user account", "Account", "IT support"),
+        ("Configure email and MFA", "Access", "IT support"),
+        ("Prepare and assign laptop", "Hardware", "IT support"),
+        ("Install required software", "Software", "System Administrator"),
+        ("Grant department access", "Access", "System Administrator")
+    ]
 
-    connection.commit()
-
-    onboarding_id = query_result.lastrowid
-
-    connection.close()
+    for task, category, assigned_to in tasks:
+        create_onboarding_task(
+            onboarding_id,
+            task,
+            category,
+            assigned_to
+        )
 
     return onboarding_id
 
-def get_onboarding(onboarding_id):
-    connection = get_connection()
+def get_onboarding_details(onboarding_id):
+    onboarding = get_onboarding(onboarding_id)
 
-    query_result = connection.execute(
-        "SELECT * FROM onboardings WHERE id = ?",
-        (onboarding_id, )
-    )
+    if not onboarding:
+        return None
 
-    onboarding = query_result.fetchone()
+    tasks = get_onboarding_tasks(onboarding_id)
 
-    connection.close()
-
-    return onboarding
-
-def update_onboarding(onboarding_id, updates):
-    connection = get_connection()
-
-    allowed_fields = {
-        "status",
-        "completed_at"
+    return {
+        "onboarding": dict(onboarding),
+        "tasks": [dict(task) for task in tasks]
     }
 
-    updates = {
-        field: value
-        for field, value in updates.items()
-        if field in allowed_fields
-    }
+def update_task(task_id, updates):
+    return update_onboarding_task(task_id, updates)
 
-    if not updates:
-        connection.close()
+def complete_onboarding(onboarding_id):
+    onboarding = get_onboarding(onboarding_id)
+
+    if not onboarding:
         return False
 
-    set_clause = ", ".join(
-        f"{field} = ?" for field in updates
-    )
+    tasks = get_onboarding_tasks(onboarding_id)
 
-    query = f"""
-        UPDATE onboardings
-        SET {set_clause}
-        WHERE id = ?
-    """
+    if not tasks:
+        return False
 
-    values = tuple(updates.values()) + (onboarding_id,)
+    # Every task must be completed
+    for task in tasks:
+        if task["status"] != "Completed":
+            return False
 
-    query_result = connection.execute(query, values)
+    completed_at = datetime.now().isoformat(timespec="seconds")
 
-    connection.commit()
-
-    onboarding_updated = query_result.rowcount > 0
-
-    connection.close()
-
-    return onboarding_updated
-
-if __name__ == "__main__":
-
-    onboarding = get_onboarding(2)
-
-    print("Before:", dict(onboarding))
-
-    result = update_onboarding(
-        2,
+    return update_onboarding(
         {
-            "status": "In Progress"
+            "status": "Completed",
+            "completed_at": completed_at
         }
     )
-
-    print("Update successful:", result)
-
-    onboarding = get_onboarding(2)
-
-    print("After:", dict(onboarding))
-    # onboarding_id = create_onboarding(1)
-
-    # if onboarding_id:
-    #     print("Onboarding created:", onboarding_id)
-
-    #     onboarding = get_onboarding(onboarding_id)
-
-    #     if onboarding:
-    #         print("Onboarding:", dict(onboarding))
-    #     else:
-    #         print("Onboarding not found")
-
-    # else:
-    #     print("Employee not found")
-
-    # onboarding_id = create_onboarding(1)
-
-    # if onboarding_id:
-    #     print("Onboarding created:", onboarding_id)
-    # else:
-    #     print("Employee not found")
