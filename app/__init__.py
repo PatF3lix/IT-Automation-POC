@@ -89,7 +89,6 @@ def create_new_ticket_route():
     data = request.get_json()
 
     ticket_id = create_ticket(
-        data["ticket_number"],
         data["employee_id"],
         data["title"],
         data["description"]

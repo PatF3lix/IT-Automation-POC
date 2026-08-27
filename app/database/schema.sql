@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS assets (
 
 CREATE TABLE IF NOT EXISTS tickets (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    ticket_number TEXT NOT NULL UNIQUE,
+    ticket_number TEXT UNIQUE,
     employee_id INTEGER,
     title TEXT NOT NULL,
     description TEXT NOT NULL,

@@ -18,10 +18,8 @@ def get_connection():
     DATABASE_DIR.mkdir(exist_ok=True)
     connection = sqlite3.connect(DATABASE_FILE)
 
-    # This controls how SQLite returns rows.
     connection.row_factory = sqlite3.Row
 
-    # Enable foreign key enforcement
     connection.execute("PRAGMA foreign_keys = ON")
 
     return connection
@@ -56,7 +54,6 @@ def get_employee(employee_id):
                        (employee_id,)
     )
 
-    # fetchone() takes the result of your SQL query and retrieves the first matching row.
     employee = query_result.fetchone()
 
     connection.close()
@@ -118,23 +115,34 @@ def delete_employee(employee_id):
 
 ######################################### Tickets #########################################
 
-def create_ticket(ticket_number, employee_id, title, description):
+def create_ticket(employee_id, title, description):
     connection = get_connection()
 
     query_result = connection.execute(
         """
         INSERT INTO tickets
-        (ticket_number, employee_id, title, description)
-        VALUES (?, ?, ?, ?)
+        (employee_id, title, description)
+        VALUES (?, ?, ?)
         """,
-        (ticket_number, employee_id, title, description)
+        (employee_id, title, description)
     )
 
     connection.commit()
 
-    # return the id of the row just inserted
     ticket_id = query_result.lastrowid
 
+    ticket_number = f"INC-{ticket_id:04d}"
+
+    connection.execute(
+        """
+        UPDATE tickets
+        SET ticket_number = ?
+        WHERE id = ?
+        """,
+        (ticket_number, ticket_id)
+    )
+
+    connection.commit()
     connection.close()
 
     return ticket_id
@@ -158,7 +166,6 @@ def update_ticket(ticket_id, updates):
     connection = get_connection()
 
     allowed_fields = {
-        "ticket_number",
         "title",
         "description",
         "status"
@@ -503,103 +510,3 @@ def update_onboarding_task(task_id, updates):
 if __name__ == "__main__":
     initialize_database()
     print(f"Database initialized: {DATABASE_FILE}")
-
-    onboarding = get_onboarding(2)
-
-    print("Before:", dict(onboarding))
-
-    result = update_onboarding(
-        2,
-        {
-            "status": "In Progress"
-        }
-    )
-
-    print("Update successful:", result)
-
-    onboarding = get_onboarding(2)
-
-    print("After:", dict(onboarding))
-
-
-    # onboarding_id = create_onboarding(1)
-
-    # if onboarding_id:
-    #     print("Onboarding created:", onboarding_id)
-
-    #     onboarding = get_onboarding(onboarding_id)
-
-    #     if onboarding:
-    #         print("Onboarding:", dict(onboarding))
-    #     else:
-    #         print("Onboarding not found")
-
-    # else:
-    #     print("Employee not found")
-
-    # onboarding_id = create_onboarding(1)
-
-    # if onboarding_id:
-    #     print("Onboarding created:", onboarding_id)
-    # else:
-    #     print("Employee not found")
-
-
-    # asset_id = create_asset(
-    # "LAP-001",
-    # "Laptop",
-    # "Dell",
-    # "DL123456",
-    # None,
-    # "2026-08-27",
-    # "2029-08-27"
-    # )
-
-    # asset = get_asset(1)
-
-    # if asset:
-    #     print("Asset:", dict(asset))
-    # else:
-    #     print("Asset not found")
-
-
-#     print("Asset created:", asset_id)
-
-    # ticket = get_ticket(1)
-
-    # if ticket:
-    #     print(ticket["ticket_number"])
-    #     print(ticket["title"])
-    #     print(ticket["description"])
-    # else:
-    #     print("Ticket not found")
-
-    # create_employee("John", "Doe", "IT", "System Administrator", "Jane Doe", "2026-09-01")
-    # create_employee("Jane", "Smith", "IT", "Programmeur", "John Doe", "2026-09-02")
-
-    # print("Employee created")
-
-    # employee = get_employee(1)
-    # if employee is not None:
-    #     print(employee["first_name"])
-    #     print(employee["last_name"])
-    #     print(employee["department"])
-    #     print(employee["job_title"])
-    # else:
-    #     print("No employee with that id was found")
-
-    # employee = get_employee(2)
-    # if employee is not None:
-    #     print(employee["first_name"])
-    #     print(employee["last_name"])
-    #     print(employee["department"])
-    #     print(employee["job_title"])
-    # else:
-    #     print("No employee with that id was found")
-
-    # update_result = update_employee(1, {"department": "Cybersecurity",
-    #                                     "job_title": "Security Analyst"})
-
-    # print("Update successful:", update_result)
-
-    # delete_employee(1)
