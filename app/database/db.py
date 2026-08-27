@@ -214,17 +214,34 @@ def update_ticket_ai(ticket_id, category, priority, assigned_team, summary, reco
     connection.commit()
     connection.close()
 
+def delete_ticket(ticket_id):
+    connection = get_connection()
+
+    query_result = connection.execute(
+        "DELETE FROM tickets WHERE id = ?",
+        (ticket_id, )
+    )
+
+    connection.commit()
+
+    ticket_deleted = query_result.rowcount > 0
+
+    connection.close()
+
+    return ticket_deleted
+
 if __name__ == "__main__":
     initialize_database()
+    print(f"Database initialized: {DATABASE_FILE}")
 
-    ticket = get_ticket(1)
+    # ticket = get_ticket(1)
 
-    if ticket:
-        print(ticket["ticket_number"])
-        print(ticket["title"])
-        print(ticket["description"])
-    else:
-        print("Ticket not found")
+    # if ticket:
+    #     print(ticket["ticket_number"])
+    #     print(ticket["title"])
+    #     print(ticket["description"])
+    # else:
+    #     print("Ticket not found")
 
     # create_employee("John", "Doe", "IT", "System Administrator", "Jane Doe", "2026-09-01")
     # create_employee("Jane", "Smith", "IT", "Programmeur", "John Doe", "2026-09-02")
@@ -255,6 +272,3 @@ if __name__ == "__main__":
     # print("Update successful:", update_result)
 
     # delete_employee(1)
-
-
-    print(f"Database initialized: {DATABASE_FILE}")

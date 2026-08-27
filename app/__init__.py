@@ -1,6 +1,6 @@
 import json
 from flask import Flask, jsonify, request
-from .database.db import get_employee, create_ticket, get_ticket, update_ticket
+from .database.db import get_employee, create_ticket, get_ticket, update_ticket, delete_ticket
 from .services.ticket_service import process_ticket
 
 app = Flask(__name__)
@@ -84,7 +84,7 @@ def update_ticket_route(ticket_id):
         process_ticket(ticket_id)
 
     ticket = get_ticket(ticket_id)
-    
+
     return jsonify({
         "id": ticket["id"],
         "ticket_number": ticket["ticket_number"],
@@ -96,7 +96,27 @@ def update_ticket_route(ticket_id):
         "ai_summary": ticket["ai_summary"],
         "ai_recommendations": json.loads(ticket["ai_recommendations"])
     })
-    
+
+@app.route("/tickets/<int:ticket_id>", methods=["DELETE"])
+def delete_ticket_route(ticket_id):
+    ticket = get_ticket(ticket_id)
+    ticket_deleted = delete_ticket(ticket_id)
+
+    if not ticket_deleted:
+        return jsonify({"error": "Ticket not found"}), 404
+
+    return jsonify({
+            "id": ticket["id"],
+            "ticket_number": ticket["ticket_number"],
+            "title": ticket["title"],
+            "description": ticket["description"],
+            "category": ticket["category"],
+            "priority": ticket["priority"],
+            "assigned_team": ticket["assigned_team"],
+            "ai_summary": ticket["ai_summary"],
+            "ai_recommendations": json.loads(ticket["ai_recommendations"])
+        })
+
     
 if __name__ == "__main__":
     app.run(debug=True)
