@@ -153,6 +153,41 @@ def get_ticket(ticket_id):
 
     return ticket
 
+def update_ticket(ticket_id, updates):
+
+    connection = get_connection()
+
+    allowed_fields = {
+        "ticket_number",
+        "title",
+        "description",
+        "status"
+    }
+
+    updates = {
+        field: value
+        for field, value in updates.items()
+        if field in allowed_fields
+    }
+
+    set_clause = ", ".join(
+        f"{field} = ?" for field in updates
+    )
+
+    query = f"""
+            UPDATE tickets
+            SET {set_clause}
+            WHERE id = ?
+        """
+
+    values = tuple(updates.values()) + (ticket_id,)
+
+    connection.execute(query, values)
+    connection.commit()
+    connection.close()
+
+    return True
+
 def update_ticket_ai(ticket_id, category, priority, assigned_team, summary, recommendations):
     connection = get_connection()
 
