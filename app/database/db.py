@@ -272,6 +272,20 @@ def get_asset(asset_id):
 
     return asset
 
+def get_employee_assets(employee_id):
+    connection = get_connection()
+
+    query_result = connection.execute(
+        "SELECT * FROM assets WHERE assigned_to = ? ",
+        (employee_id, )
+    )
+
+    assets = query_result.fetchall()
+
+    connection.close()
+
+    return assets
+
 def update_asset(asset_id, updates):
 
     connection = get_connection()

@@ -1,7 +1,19 @@
 import json
 from flask import Flask, jsonify, request
-from .database.db import get_employee, create_ticket, get_ticket, update_ticket, delete_ticket
+from .database.db import (
+    get_employee,
+    create_ticket,
+    get_ticket,
+    update_ticket,
+    delete_ticket,
+    create_asset,
+    get_asset,
+    update_asset,
+    delete_asset,
+    get_employee_assets
+)
 from .services.ticket_service import process_ticket
+from .services.asset_service import assign_asset, return_asset
 
 app = Flask(__name__)
 
