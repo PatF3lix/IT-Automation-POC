@@ -1,5 +1,5 @@
 # The idea is to keep Ollama's communication separate from Flask.
-import requests
+import requests, json
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL = "qwen2.5:7b"
@@ -12,12 +12,21 @@ Analyze the following ticket:
 
 {description}
 
-Provide:
-- Category
-- Priority
-- Assigned team
-- Summary
-- Recommended actions
+Return ONLY valid json.
+Do not include markdown, explanations, or ```json code blocks.
+
+Use exactly these fields:
+
+{{
+    "category": "Network, Hardware, Software, Access, Security, or Other",
+    "priority": "Low, Medium, High, or Critical",
+    "assigned_team": "the appropriate IT team",
+    "summary": "a short summary of the problem",
+    "recommendations": [
+        "recommended action 1",
+        "recommended action 2"
+    ]
+}}
 """
     response = requests.post(
         OLLAMA_URL,
@@ -32,7 +41,7 @@ Provide:
 
     result = response.json()
 
-    return result["response"]
+    return json.loads(result["response"])
 
 if __name__ == "__main__":
     result = analyze_ticket(
@@ -40,3 +49,6 @@ if __name__ == "__main__":
     )
 
     print(result)
+    print(type(result))
+    print(result["category"])
+    print(result["priority"])

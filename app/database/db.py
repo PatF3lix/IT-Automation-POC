@@ -1,5 +1,7 @@
-import sqlite3
+import sqlite3, json
 from pathlib import Path
+
+######################################### DB connection #########################################
 
 #BASE_DIR : IT-AUTOMATION-POC
 #DATABASE_DIR: IT-AUTOMATION-POC/data
@@ -10,7 +12,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DATABASE_DIR = BASE_DIR / "data"
 DATABASE_FILE = DATABASE_DIR / "automation.db"
 SCHEMA_FILE = Path(__file__).resolve().parent / "schema.sql"
-
 
 
 def get_connection():
@@ -138,10 +139,57 @@ def create_ticket(ticket_number, employee_id, title, description):
 
     return ticket_id
 
+def get_ticket(ticket_id):
+    connection = get_connection()
 
+    query_result = connection.execute(
+        "SELECT * FROM tickets WHERE id = ?",
+        (ticket_id,)
+    )
+
+    ticket = query_result.fetchone()
+
+    connection.close()
+
+    return ticket
+
+def update_ticket_ai(ticket_id, category, priority, assigned_team, summary, recommendations):
+    connection = get_connection()
+
+    connection.execute(
+        """
+        UPDATE tickets
+        SET category = ?,
+            priority = ?,
+            assigned_team = ?,
+            ai_summary = ?,
+            ai_recommendations = ?
+        WHERE id = ?
+        """,
+        (
+            category,
+            priority,
+            assigned_team,
+            summary,
+            json.dumps(recommendations),
+            ticket_id
+        )
+    )
+
+    connection.commit()
+    connection.close()
 
 if __name__ == "__main__":
     initialize_database()
+
+    ticket = get_ticket(1)
+
+    if ticket:
+        print(ticket["ticket_number"])
+        print(ticket["title"])
+        print(ticket["description"])
+    else:
+        print("Ticket not found")
 
     # create_employee("John", "Doe", "IT", "System Administrator", "Jane Doe", "2026-09-01")
     # create_employee("Jane", "Smith", "IT", "Programmeur", "John Doe", "2026-09-02")
