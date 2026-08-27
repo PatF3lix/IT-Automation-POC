@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}IT Automation POC{% endblock %}</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <header class="topbar">
+        <h1>IT Automation POC</h1>
+    </header>
+
+    <div class="layout">
+
+        <nav class="sidebar">
+            <a href="/">Dashboard</a>
+            <a href="/tickets-ui">Tickets</a>
+            <a href="/assets-ui">Assets</a>
+            <a href="/onboarding-ui">Onboarding</a>
+        </nav>
+
+        <main class="content">
+            {% block content %}
+            {% endblock %}
+        </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+</html>

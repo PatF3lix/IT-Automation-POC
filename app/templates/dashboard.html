@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard - IT Automation POC
+{% endblock %}
+
+{% block content %}
+
+<h2>Dashboard</h2>
+
+<div class="dashboard-grid">
+
+    <div class="card">
+        <h3>AI Ticket Triage</h3>
+        <p>Create and automatically analyze IT support tickets.</p>
+        <a href="/tickets-ui">Open Tickets</a>
+    </div>
+
+    <div class="card">
+        <h3>IT Asset Lifecycle</h3>
+        <p>Create, assign, return, and manage company assets.</p>
+        <a href="/assets-ui">Manage Assets</a>
+    </div>
+
+    <div class="card">
+        <h3>Employee Onboarding</h3>
+        <p>Generate and track IT onboarding tasks.</p>
+        <a href="/onboarding-ui">Manage Onboarding</a>
+    </div>
+
+</div>
+
+{% endblock %}

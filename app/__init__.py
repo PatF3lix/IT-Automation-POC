@@ -1,4 +1,5 @@
 import json
+from flask import render_template
 from flask import Flask, jsonify, request
 from .services.ticket_service import process_ticket
 from .services.asset_service import assign_asset, return_asset
@@ -27,7 +28,19 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "IT Automation POC is running!"
+    return render_template("dashboard.html")
+
+@app.route("/tickets-ui")
+def tickets_page():
+    return render_template("tickets.html")
+
+@app.route("/assets-ui")
+def assets_page():
+    return render_template("assets.html")
+
+@app.route("/onboarding-ui")
+def onboarding_page():
+    return render_template("onboarding.html")
 
 ######################################### API Employees Routes #################################
 
