@@ -1,8 +1,9 @@
+import json
 from flask import Flask, jsonify, request
-from .database.db import get_employee, create_ticket
+from .database.db import get_employee, create_ticket, get_ticket
+from .services.ticket_service import process_ticket
 
 app = Flask(__name__)
-
 
 @app.route("/")
 def home():
@@ -18,7 +19,7 @@ def employee(employee_id):
     return jsonify({
         "id": employee["id"],
         "first_name": employee["first_name"],
-        "first_name": employee["last_name"],
+        "last_name": employee["last_name"],
         "department": employee["department"],
         "job_title": employee["job_title"]
     })
@@ -35,11 +36,20 @@ def create_new_ticket():
         data["description"]
     )
 
-    return jsonify ({
-        "message": "Ticket created",
-        "ticket_id": ticket_id
-    }), 201
+    process_ticket(ticket_id)
+    ticket = get_ticket(ticket_id)
 
+    return jsonify({
+    "id": ticket["id"],
+    "ticket_number": ticket["ticket_number"],
+    "title": ticket["title"],
+    "description": ticket["description"],
+    "category": ticket["category"],
+    "priority": ticket["priority"],
+    "assigned_team": ticket["assigned_team"],
+    "ai_summary": ticket["ai_summary"],
+    "ai_recommendations": json.loads(ticket["ai_recommendations"])
+    }), 201
 
 if __name__ == "__main__":
     app.run(debug=True)
