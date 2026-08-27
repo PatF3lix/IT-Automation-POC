@@ -62,14 +62,14 @@ def complete_onboarding(onboarding_id):
     if not tasks:
         return False
 
-    # Every task must be completed
     for task in tasks:
-        if task["status"] != "Completed":
+        if task["status"].lower() != "completed":
             return False
 
     completed_at = datetime.now().isoformat(timespec="seconds")
 
     return update_onboarding(
+        onboarding_id,
         {
             "status": "Completed",
             "completed_at": completed_at
