@@ -43,6 +43,10 @@ def assets_page():
 def onboarding_page():
     return render_template("onboarding.html")
 
+@app.route("/employees-ui")
+def employees_page():
+    return render_template("employees.html")
+
 ######################################### API Employees Routes #################################
 
 @app.route("/employees/<int:employee_id>")
