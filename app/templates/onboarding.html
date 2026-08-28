@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}
+Onboarding - IT Automation POC
+{% endblock %}
+
+{% block content %}
+
+<h2>Employee Onboarding</h2>
+
+
+<!-- START ONBOARDING -->
+<div class="card">
+    <h3>Start Onboarding</h3>
+
+    <form id="start-onboarding-form">
+
+        <label for="onboarding-employee-id">Employee ID</label>
+        <input type="number" id="onboarding-employee-id" required>
+
+        <button type="submit">
+            Start Onboarding
+        </button>
+
+    </form>
+</div>
+
+
+<!-- FIND ONBOARDING -->
+<div class="card">
+    <h3>Find Onboarding</h3>
+
+    <form id="find-onboarding-form">
+
+        <label for="search-onboarding-id">Onboarding ID</label>
+        <input type="number" id="search-onboarding-id" required>
+
+        <button type="submit">
+            Get Onboarding
+        </button>
+
+    </form>
+</div>
+
+
+<!-- ONBOARDING DETAILS -->
+<div class="card" id="onboarding-result" style="display: none;">
+
+    <h3>Onboarding Details</h3>
+
+    <p>
+        <strong>Onboarding ID:</strong>
+        <span id="result-onboarding-id"></span>
+    </p>
+
+    <p>
+        <strong>Employee ID:</strong>
+        <span id="result-employee-id"></span>
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        <span id="result-onboarding-status"></span>
+    </p>
+
+    <p>
+        <strong>Created:</strong>
+        <span id="result-created-at"></span>
+    </p>
+
+    <p>
+        <strong>Completed:</strong>
+        <span id="result-completed-at"></span>
+    </p>
+
+    <hr>
+
+    <h3>Onboarding Tasks</h3>
+
+    <div id="onboarding-tasks"></div>
+
+</div>
+
+
+<!-- COMPLETE ONBOARDING -->
+<div class="card">
+    <h3>Complete Onboarding</h3>
+
+    <form id="complete-onboarding-form">
+
+        <label for="complete-onboarding-id">Onboarding ID</label>
+        <input type="number" id="complete-onboarding-id" required>
+
+        <button type="submit">
+            Complete Onboarding
+        </button>
+
+    </form>
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/onboarding.js') }}"></script>
+{% endblock %}

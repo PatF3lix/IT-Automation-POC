@@ -69,17 +69,6 @@ def get_employee_assets_route(employee_id):
         "assets": [dict(asset) for asset in employee_assets]
     })
 
-@app.route("/employees/<int:employee_id>/onboarding", methods=["POST"])
-def start_employee_onboarding(employee_id):
-
-    onboarding_id = start_onboarding(employee_id)
-
-    if not onboarding_id:
-        return jsonify({"error": "Employee not found"}), 404
-
-    onboarding = get_onboarding_details(onboarding_id)
-
-    return jsonify(onboarding), 201
 
 ######################################### API Tickets Routes #################################
 
@@ -321,6 +310,18 @@ def return_asset_route(asset_id):
     })
 
 ######################################### API ONBOARDING Routes #################################
+
+@app.route("/employees/<int:employee_id>/onboarding", methods=["POST"])
+def start_employee_onboarding(employee_id):
+
+    onboarding_id = start_onboarding(employee_id)
+
+    if not onboarding_id:
+        return jsonify({"error": "Employee not found"}), 404
+
+    onboarding = get_onboarding_details(onboarding_id)
+
+    return jsonify(onboarding), 201
 
 @app.route("/onboardings/<int:onboarding_id>")
 def get_onboarding_route(onboarding_id):
