@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}
+Assets - IT Automation POC
+{% endblock %}
+
+{% block content %}
+
+<h2>IT Asset Lifecycle</h2>
+
+
+<!-- CREATE ASSET -->
+<div class="card">
+    <h3>Create Asset</h3>
+
+    <form id="asset-form">
+
+        <label for="asset-tag">Asset Tag</label>
+        <input type="text" id="asset-tag" required>
+
+        <label for="asset-type">Asset Type</label>
+        <input type="text" id="asset-type" placeholder="Laptop" required>
+
+        <label for="manufacturer">Manufacturer</label>
+        <input type="text" id="manufacturer">
+
+        <label for="serial-number">Serial Number</label>
+        <input type="text" id="serial-number" required>
+
+        <label for="purchase-date">Purchase Date</label>
+        <input type="date" id="purchase-date">
+
+        <label for="warranty-end">Warranty End</label>
+        <input type="date" id="warranty-end">
+
+        <button type="submit">
+            Create Asset
+        </button>
+
+    </form>
+</div>
+
+
+<!-- FIND ASSET -->
+<div class="card">
+    <h3>Find Asset</h3>
+
+    <form id="asset-search-form">
+
+        <label for="search-asset-id">Asset ID</label>
+        <input type="number" id="search-asset-id" required>
+
+        <button type="submit">
+            Get Asset
+        </button>
+
+    </form>
+</div>
+
+
+<!-- ASSET DETAILS -->
+<div class="card" id="asset-result" style="display: none;">
+
+    <h3>Asset Details</h3>
+
+    <p>
+        <strong>ID:</strong>
+        <span id="result-asset-id"></span>
+    </p>
+
+    <p>
+        <strong>Asset Tag:</strong>
+        <span id="result-asset-tag"></span>
+    </p>
+
+    <p>
+        <strong>Type:</strong>
+        <span id="result-asset-type"></span>
+    </p>
+
+    <p>
+        <strong>Manufacturer:</strong>
+        <span id="result-manufacturer"></span>
+    </p>
+
+    <p>
+        <strong>Serial Number:</strong>
+        <span id="result-serial-number"></span>
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        <span id="result-status"></span>
+    </p>
+
+    <p>
+        <strong>Assigned To:</strong>
+        <span id="result-assigned-to"></span>
+    </p>
+
+    <p>
+        <strong>Purchase Date:</strong>
+        <span id="result-purchase-date"></span>
+    </p>
+
+    <p>
+        <strong>Warranty End:</strong>
+        <span id="result-warranty-end"></span>
+    </p>
+
+</div>
+
+
+<!-- ASSIGN ASSET -->
+<div class="card">
+    <h3>Assign Asset</h3>
+
+    <form id="assign-asset-form">
+
+        <label for="assign-asset-id">Asset ID</label>
+        <input type="number" id="assign-asset-id" required>
+
+        <label for="assign-employee-id">Employee ID</label>
+        <input type="number" id="assign-employee-id" required>
+
+        <button type="submit">
+            Assign Asset
+        </button>
+
+    </form>
+</div>
+
+
+<!-- RETURN ASSET -->
+<div class="card">
+    <h3>Return Asset</h3>
+
+    <form id="return-asset-form">
+
+        <label for="return-asset-id">Asset ID</label>
+        <input type="number" id="return-asset-id" required>
+
+        <button type="submit">
+            Return Asset
+        </button>
+
+    </form>
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/assets.js') }}"></script>
+{% endblock %}
