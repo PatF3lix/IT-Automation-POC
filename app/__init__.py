@@ -14,6 +14,7 @@ from .database.db import (
     update_asset,
     delete_asset,
     get_employee_assets,
+    get_employee_tickets,
     get_all_employees
 )
 from .services.onboarding_service import (
@@ -83,6 +84,19 @@ def get_employee_assets_route(employee_id):
         "assets": [dict(asset) for asset in employee_assets]
     })
 
+@app.route("/employees/<int:employee_id>/tickets")
+def get_employee_tickets_route(employee_id):
+    employee = get_employee(employee_id)
+
+    if not employee:
+        return jsonify({"error": "Employee not found"}), 404
+
+    tickets = get_employee_tickets(employee_id)
+
+    return jsonify({
+        "employee_id": employee_id,
+        "tickets": [dict(ticket) for ticket in tickets]
+    })
 
 ######################################### API Tickets Routes #################################
 
@@ -108,6 +122,7 @@ def create_new_ticket_route():
     "category": ticket["category"],
     "priority": ticket["priority"],
     "assigned_team": ticket["assigned_team"],
+    "assigned_to": ticket["assigned_to"],
     "ai_summary": ticket["ai_summary"],
     "ai_recommendations": json.loads(ticket["ai_recommendations"])
     }), 201
@@ -127,6 +142,7 @@ def get_ticket_route(ticket_id):
         "category": ticket["category"],
         "priority": ticket["priority"],
         "assigned_team": ticket["assigned_team"],
+        "assigned_to": ticket["assigned_to"],
         "ai_summary": ticket["ai_summary"],
         "ai_recommendations": json.loads(ticket["ai_recommendations"])
         })
