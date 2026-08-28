@@ -10,7 +10,7 @@ from ..database.db import (
 def process_ticket(ticket_id):
     ticket = get_ticket(ticket_id)
 
-    if ticket_id is None:
+    if ticket is None:
         return False
 
     ticket_analysis = analyze_ticket(ticket["description"])
@@ -22,6 +22,12 @@ def process_ticket(ticket_id):
         ticket_analysis["assigned_team"],
         ticket_analysis["summary"],
         ticket_analysis["recommendations"]
+    )
+
+    assign_best_employee(
+        ticket_id,
+        ticket_analysis["required_department"],
+        ticket_analysis["preferred_role"]
     )
 
     return True
