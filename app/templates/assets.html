@@ -4,149 +4,305 @@
 Assets - IT Automation POC
 {% endblock %}
 
+
+{% block styles %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/assets.css') }}"
+>
+{% endblock %}
+
+
 {% block content %}
 
-<h2>IT Asset Lifecycle</h2>
+<div class="assets-header">
+    <h2>IT Asset Lifecycle</h2>
 
-
-<!-- CREATE ASSET -->
-<div class="card">
-    <h3>Create Asset</h3>
-
-    <form id="asset-form">
-
-        <label for="asset-tag">Asset Tag</label>
-        <input type="text" id="asset-tag" required>
-
-        <label for="asset-type">Asset Type</label>
-        <input type="text" id="asset-type" placeholder="Laptop" required>
-
-        <label for="manufacturer">Manufacturer</label>
-        <input type="text" id="manufacturer">
-
-        <label for="serial-number">Serial Number</label>
-        <input type="text" id="serial-number" required>
-
-        <label for="purchase-date">Purchase Date</label>
-        <input type="date" id="purchase-date">
-
-        <label for="warranty-end">Warranty End</label>
-        <input type="date" id="warranty-end">
-
-        <button type="submit">
-            Create Asset
-        </button>
-
-    </form>
+    <p>
+        Create, search, assign, and return company IT assets
+        from one centralized interface.
+    </p>
 </div>
 
 
-<!-- FIND ASSET -->
-<div class="card">
-    <h3>Find Asset</h3>
+<div class="assets-grid">
 
-    <form id="asset-search-form">
+    <!-- CREATE ASSET -->
+    <div class="card asset-card asset-create-card">
 
-        <label for="search-asset-id">Asset ID</label>
-        <input type="number" id="search-asset-id" required>
+        <div class="asset-card-header">
+            <span class="asset-step">01</span>
 
-        <button type="submit">
-            Get Asset
-        </button>
+            <div>
+                <h3>Create Asset</h3>
+                <p>Add new hardware to the asset inventory.</p>
+            </div>
+        </div>
 
-    </form>
+        <form id="asset-form">
+
+            <div class="form-group">
+                <label for="asset-tag">Asset Tag</label>
+                <input
+                    type="text"
+                    id="asset-tag"
+                    placeholder="e.g. LAP-003"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="asset-type">Asset Type</label>
+                <input
+                    type="text"
+                    id="asset-type"
+                    placeholder="e.g. Laptop"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="manufacturer">Manufacturer</label>
+                <input
+                    type="text"
+                    id="manufacturer"
+                    placeholder="e.g. Dell"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="serial-number">Serial Number</label>
+                <input
+                    type="text"
+                    id="serial-number"
+                    placeholder="e.g. DL-003-2026"
+                    required
+                >
+            </div>
+
+            <div class="asset-date-grid">
+
+                <div class="form-group">
+                    <label for="purchase-date">Purchase Date</label>
+                    <input
+                        type="date"
+                        id="purchase-date"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="warranty-end">Warranty End</label>
+                    <input
+                        type="date"
+                        id="warranty-end"
+                    >
+                </div>
+
+            </div>
+
+            <button
+                type="submit"
+                class="asset-primary-button"
+            >
+                Create Asset
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- FIND ASSET -->
+    <div class="card asset-card">
+
+        <div class="asset-card-header">
+            <span class="asset-step">02</span>
+
+            <div>
+                <h3>Find Asset</h3>
+                <p>Retrieve asset details using its database ID.</p>
+            </div>
+        </div>
+
+        <form id="asset-search-form">
+
+            <div class="form-group">
+                <label for="search-asset-id">Asset ID</label>
+
+                <input
+                    type="number"
+                    id="search-asset-id"
+                    placeholder="e.g. 1"
+                    required
+                >
+            </div>
+
+            <button type="submit">
+                Get Asset
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ASSIGN ASSET -->
+    <div class="card asset-card">
+
+        <div class="asset-card-header">
+            <span class="asset-step">03</span>
+
+            <div>
+                <h3>Assign Asset</h3>
+                <p>Assign available hardware to an employee.</p>
+            </div>
+        </div>
+
+        <form id="assign-asset-form">
+
+            <div class="form-group">
+                <label for="assign-asset-id">Asset ID</label>
+
+                <input
+                    type="number"
+                    id="assign-asset-id"
+                    placeholder="e.g. 3"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="assign-employee-id">Employee ID</label>
+
+                <input
+                    type="number"
+                    id="assign-employee-id"
+                    placeholder="e.g. 2"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="assign-button"
+            >
+                Assign Asset
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- RETURN ASSET -->
+    <div class="card asset-card">
+
+        <div class="asset-card-header">
+            <span class="asset-step">04</span>
+
+            <div>
+                <h3>Return Asset</h3>
+                <p>Return assigned hardware back to inventory.</p>
+            </div>
+        </div>
+
+        <form id="return-asset-form">
+
+            <div class="form-group">
+                <label for="return-asset-id">Asset ID</label>
+
+                <input
+                    type="number"
+                    id="return-asset-id"
+                    placeholder="e.g. 3"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="return-button"
+            >
+                Return Asset
+            </button>
+
+        </form>
+
+    </div>
+
 </div>
 
 
 <!-- ASSET DETAILS -->
-<div class="card" id="asset-result" style="display: none;">
+<div
+    class="card asset-result-card"
+    id="asset-result"
+    style="display: none;"
+>
 
-    <h3>Asset Details</h3>
+    <div class="asset-result-header">
 
-    <p>
-        <strong>ID:</strong>
-        <span id="result-asset-id"></span>
-    </p>
+        <div>
+            <span class="asset-result-label">
+                Inventory Record
+            </span>
 
-    <p>
-        <strong>Asset Tag:</strong>
-        <span id="result-asset-tag"></span>
-    </p>
+            <h3>Asset Details</h3>
+        </div>
 
-    <p>
-        <strong>Type:</strong>
-        <span id="result-asset-type"></span>
-    </p>
+        <span
+            class="asset-status"
+            id="result-status"
+        ></span>
 
-    <p>
-        <strong>Manufacturer:</strong>
-        <span id="result-manufacturer"></span>
-    </p>
+    </div>
 
-    <p>
-        <strong>Serial Number:</strong>
-        <span id="result-serial-number"></span>
-    </p>
 
-    <p>
-        <strong>Status:</strong>
-        <span id="result-status"></span>
-    </p>
+    <div class="asset-result-grid">
 
-    <p>
-        <strong>Assigned To:</strong>
-        <span id="result-assigned-to"></span>
-    </p>
+        <div class="asset-detail">
+            <span class="detail-label">Asset ID</span>
+            <span class="detail-value" id="result-asset-id"></span>
+        </div>
 
-    <p>
-        <strong>Purchase Date:</strong>
-        <span id="result-purchase-date"></span>
-    </p>
+        <div class="asset-detail">
+            <span class="detail-label">Asset Tag</span>
+            <span class="detail-value" id="result-asset-tag"></span>
+        </div>
 
-    <p>
-        <strong>Warranty End:</strong>
-        <span id="result-warranty-end"></span>
-    </p>
+        <div class="asset-detail">
+            <span class="detail-label">Type</span>
+            <span class="detail-value" id="result-asset-type"></span>
+        </div>
+
+        <div class="asset-detail">
+            <span class="detail-label">Manufacturer</span>
+            <span class="detail-value" id="result-manufacturer"></span>
+        </div>
+
+        <div class="asset-detail">
+            <span class="detail-label">Serial Number</span>
+            <span class="detail-value" id="result-serial-number"></span>
+        </div>
+
+        <div class="asset-detail">
+            <span class="detail-label">Assigned To</span>
+            <span class="detail-value" id="result-assigned-to"></span>
+        </div>
+
+        <div class="asset-detail">
+            <span class="detail-label">Purchase Date</span>
+            <span class="detail-value" id="result-purchase-date"></span>
+        </div>
+
+        <div class="asset-detail">
+            <span class="detail-label">Warranty End</span>
+            <span class="detail-value" id="result-warranty-end"></span>
+        </div>
+
+    </div>
 
 </div>
-
-
-<!-- ASSIGN ASSET -->
-<div class="card">
-    <h3>Assign Asset</h3>
-
-    <form id="assign-asset-form">
-
-        <label for="assign-asset-id">Asset ID</label>
-        <input type="number" id="assign-asset-id" required>
-
-        <label for="assign-employee-id">Employee ID</label>
-        <input type="number" id="assign-employee-id" required>
-
-        <button type="submit">
-            Assign Asset
-        </button>
-
-    </form>
-</div>
-
-
-<!-- RETURN ASSET -->
-<div class="card">
-    <h3>Return Asset</h3>
-
-    <form id="return-asset-form">
-
-        <label for="return-asset-id">Asset ID</label>
-        <input type="number" id="return-asset-id" required>
-
-        <button type="submit">
-            Return Asset
-        </button>
-
-    </form>
-</div>
-
 
 {% endblock %}
 

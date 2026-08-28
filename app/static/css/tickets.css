@@ -1,0 +1,435 @@
+/* ========================================
+   TICKETS PAGE HEADER
+======================================== */
+
+.tickets-header {
+    margin-bottom: 28px;
+}
+
+.tickets-header h2 {
+    margin-bottom: 8px;
+}
+
+.tickets-header p {
+    color: #94a3b8;
+    max-width: 760px;
+}
+
+
+/* ========================================
+   MAIN TICKET LAYOUT
+======================================== */
+
+.ticket-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+
+/* ========================================
+   FORM CARD
+======================================== */
+
+.ticket-form-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.ticket-form-card::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background: #38bdf8;
+}
+
+
+/* ========================================
+   CARD HEADER
+======================================== */
+
+.ticket-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+
+    margin-bottom: 24px;
+}
+
+.ticket-card-header > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ticket-card-header h3 {
+    margin: 0;
+}
+
+
+/* ========================================
+   STEP BADGE
+======================================== */
+
+.ticket-step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    background-color: #0f172a;
+
+    border: 1px solid #334155;
+    border-radius: 8px;
+
+    color: #38bdf8;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* ========================================
+   AI BADGE
+======================================== */
+
+.ai-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 6px 10px;
+
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 20px;
+
+    background-color: rgba(56, 189, 248, 0.08);
+
+    color: #7dd3fc;
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+
+/* ========================================
+   FORM GROUPS
+======================================== */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.ticket-form-card textarea {
+    min-height: 145px;
+}
+
+
+/* ========================================
+   ANALYZE BUTTON
+======================================== */
+
+.analyze-button {
+    margin-top: 5px;
+
+    padding: 12px 20px;
+
+    background: linear-gradient(
+        135deg,
+        #0284c7,
+        #0369a1
+    );
+
+    box-shadow: 0 6px 18px rgba(2, 132, 199, 0.2);
+}
+
+.analyze-button:hover {
+    background: linear-gradient(
+        135deg,
+        #0ea5e9,
+        #0284c7
+    );
+}
+
+
+/* ========================================
+   RESULT CARD
+======================================== */
+
+.ticket-result-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.ticket-result-card::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background: #22c55e;
+}
+
+
+/* ========================================
+   ANALYSIS COMPLETE BADGE
+======================================== */
+
+.analysis-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 10px;
+
+    background-color: rgba(34, 197, 94, 0.08);
+
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 20px;
+
+    color: #86efac;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.analysis-badge::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background-color: #22c55e;
+}
+
+
+/* ========================================
+   TICKET NUMBER
+======================================== */
+
+.ticket-number-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 15px 17px;
+
+    margin-bottom: 18px;
+
+    background-color: #0f172a;
+
+    border: 1px solid #334155;
+    border-radius: 8px;
+}
+
+.ticket-number {
+    color: #38bdf8;
+
+    font-family: Consolas, monospace;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+/* ========================================
+   RESULT GRID
+======================================== */
+
+.result-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+}
+
+.result-box {
+    background-color: #0f172a;
+
+    border: 1px solid #334155;
+    border-radius: 8px;
+
+    padding: 15px;
+}
+
+.result-label {
+    display: block;
+
+    color: #64748b;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+
+    margin-bottom: 5px;
+}
+
+.result-value {
+    color: #f8fafc;
+
+    font-size: 15px;
+    font-weight: 600;
+}
+
+
+/* ========================================
+   AI RESULT SECTIONS
+======================================== */
+
+.ai-section {
+    background-color: #0f172a;
+
+    border: 1px solid #334155;
+    border-radius: 8px;
+
+    padding: 17px;
+
+    margin-top: 14px;
+}
+
+.ai-section h4 {
+    color: #7dd3fc;
+
+    margin-bottom: 10px;
+}
+
+.ai-section p {
+    color: #cbd5e1;
+
+    margin: 0;
+}
+
+.ai-section ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.ai-section li {
+    color: #cbd5e1;
+
+    line-height: 1.6;
+
+    margin-bottom: 8px;
+}
+
+.ai-section li:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 1050px) {
+
+    .ticket-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .ticket-card-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .result-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ticket-number-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
+    }
+}
+
+/* ========================================
+   AI LOADING STATE
+======================================== */
+
+.ticket-loading {
+    grid-column: 2;
+
+    background-color: #1e293b;
+
+    border: 1px solid #334155;
+    border-left: 3px solid #38bdf8;
+    border-radius: 10px;
+
+    padding: 24px;
+
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+}
+
+.ticket-loading h4 {
+    color: #f8fafc;
+    margin: 0 0 5px 0;
+}
+
+.ticket-loading p {
+    color: #94a3b8;
+    margin: 0;
+}
+
+.loading-spinner {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    border: 4px solid #334155;
+    border-top-color: #38bdf8;
+
+    border-radius: 50%;
+
+    animation: ticket-spin 0.8s linear infinite;
+}
+
+@keyframes ticket-spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 1050px) {
+
+    .ticket-loading {
+        grid-column: 1;
+    }
+}

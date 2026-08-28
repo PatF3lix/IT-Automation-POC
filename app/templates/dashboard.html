@@ -4,28 +4,109 @@
 Dashboard - IT Automation POC
 {% endblock %}
 
+
+{% block styles %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/dashboard.css') }}"
+>
+{% endblock %}
+
+
 {% block content %}
 
-<h2>Dashboard</h2>
+<div class="dashboard-intro">
+    <h2>Dashboard</h2>
+
+    <p>
+        IT automation platform for AI ticket triage,
+        asset lifecycle management, employee onboarding,
+        and employee IT resources.
+    </p>
+</div>
+
+
+<div class="dashboard-status">
+    System Operational
+</div>
+
 
 <div class="dashboard-grid">
 
-    <div class="card">
-        <h3>AI Ticket Triage</h3>
-        <p>Create and automatically analyze IT support tickets.</p>
-        <a href="/tickets-ui">Open Tickets</a>
+    <!-- AI Ticket Triage -->
+    <div class="dashboard-card">
+
+        <div>
+            <h3>AI Ticket Triage</h3>
+
+            <p>
+                Create IT support tickets and automatically
+                analyze category, priority, assigned team,
+                and recommended actions using AI.
+            </p>
+        </div>
+
+        <a href="/tickets-ui">
+            Open Tickets →
+        </a>
+
     </div>
 
-    <div class="card">
-        <h3>IT Asset Lifecycle</h3>
-        <p>Create, assign, return, and manage company assets.</p>
-        <a href="/assets-ui">Manage Assets</a>
+
+    <!-- IT Asset Lifecycle -->
+    <div class="dashboard-card">
+
+        <div>
+            <h3>IT Asset Lifecycle</h3>
+
+            <p>
+                Create, assign, return, and manage company
+                IT assets throughout their lifecycle.
+            </p>
+        </div>
+
+        <a href="/assets-ui">
+            Manage Assets →
+        </a>
+
     </div>
 
-    <div class="card">
-        <h3>Employee Onboarding</h3>
-        <p>Generate and track IT onboarding tasks.</p>
-        <a href="/onboarding-ui">Manage Onboarding</a>
+
+    <!-- Employee Onboarding -->
+    <div class="dashboard-card">
+
+        <div>
+            <h3>Employee Onboarding</h3>
+
+            <p>
+                Create onboarding workflows, automatically
+                generate IT tasks, and track their completion.
+            </p>
+        </div>
+
+        <a href="/onboarding-ui">
+            Manage Onboarding →
+        </a>
+
+    </div>
+
+
+    <!-- Employees -->
+    <div class="dashboard-card">
+
+        <div>
+            <h3>Employees</h3>
+
+            <p>
+                View employees, job roles, and their assigned
+                IT assets from one central overview.
+            </p>
+        </div>
+
+        <a href="/employees-ui">
+            View Employees →
+        </a>
+
     </div>
 
 </div>

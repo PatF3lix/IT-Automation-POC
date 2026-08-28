@@ -1,34 +1,56 @@
 const loadEmployeesButton = document.getElementById("load-employees-button");
 
-//Load all employees
-if(loadEmployeesButton) {
+// Load all employees
+if (loadEmployeesButton) {
 
     loadEmployeesButton.addEventListener("click", async function() {
 
-        try{
+        try {
+
             const response = await fetch("/employees");
             const employees = await response.json();
 
-            if(!response.ok) {
+            if (!response.ok) {
                 alert("Unable to load employees");
                 return;
             }
 
-            const employeesList = document.getElementById("employees-list");
+            const employeesList =
+                document.getElementById("employees-list");
+
             employeesList.innerHTML = "";
 
-            employees.forEach(function(employee){
-                const employeeDiv = document.createElement("div");
+            employees.forEach(function(employee) {
+
+                const employeeDiv =
+                    document.createElement("div");
+
                 employeeDiv.classList.add("employee-item");
 
                 employeeDiv.innerHTML = `
-                    <p>
-                        <strong>
-                            ${employee.first_name} ${employee.last_name}
-                        </strong>
-                    </p>
+                    <div class="employee-summary">
 
-                    <p>${employee.job_title}</p>
+                        <div class="employee-summary-main">
+
+                            <h3 class="employee-card-name">
+                                ${employee.first_name} ${employee.last_name}
+                            </h3>
+
+                            <p class="employee-card-role">
+                                ${employee.job_title}
+                            </p>
+
+                            <p class="employee-card-department">
+                                ${employee.department}
+                            </p>
+
+                        </div>
+
+                        <span class="employee-card-id">
+                            #${employee.id}
+                        </span>
+
+                    </div>
 
                     <div
                         id="employee-details-${employee.id}"
@@ -39,146 +61,262 @@ if(loadEmployeesButton) {
 
                     <button
                         type="button"
-                        onclick="loadEmployee(${employee.id})"
+                        class="view-employee-button"
+                        id="employee-button-${employee.id}"
+                        onclick="toggleEmployee(${employee.id})"
                     >
                         View Employee
                     </button>
-
-                    <hr>
                 `;
 
                 employeesList.appendChild(employeeDiv);
             });
-        }catch(error){
+
+        } catch(error) {
+
             console.error(error);
-            alert("Unable to communicate with the server.")
+            alert("Unable to communicate with the server.");
         }
     });
 }
 
+
+// Toggle employee details
+async function toggleEmployee(employeeId) {
+
+    const detailsContainer =
+        document.getElementById(
+            `employee-details-${employeeId}`
+        );
+
+    const button =
+        document.getElementById(
+            `employee-button-${employeeId}`
+        );
+
+
+    // If currently visible, hide details
+    if (detailsContainer.style.display === "block") {
+
+        detailsContainer.style.display = "none";
+
+        button.textContent = "View Employee";
+
+        return;
+    }
+
+
+    // Otherwise load and show details
+    await loadEmployee(employeeId);
+
+    button.textContent = "Less Details";
+}
+
+
 // Load one employee + assigned assets
-async function loadEmployee(employeeId){
+async function loadEmployee(employeeId) {
 
-    try{
+    try {
 
-        //Employee details
-        const employeeResponse = await fetch(`/employees/${employeeId}`);
-        const employee = await employeeResponse.json();
+        // Employee details
+        const employeeResponse =
+            await fetch(`/employees/${employeeId}`);
 
-        if (!employeeResponse.ok){
+        const employee =
+            await employeeResponse.json();
+
+        if (!employeeResponse.ok) {
             alert(employee.error || "Employee not found");
             return;
         }
 
-        //Assigned assets
-        const assetsResponse = await fetch(`/employees/${employeeId}/assets`);
-        const assetsData = await assetsResponse.json();
 
-        if (!assetsResponse.ok){
+        // Assigned assets
+        const assetsResponse =
+            await fetch(`/employees/${employeeId}/assets`);
+
+        const assetsData =
+            await assetsResponse.json();
+
+        if (!assetsResponse.ok) {
             alert("Unable to load employee assets");
             return;
         }
 
-        displayEmployee(employee, assetsData.assets);
 
-        document.getElementById("employee-tickets-card").style.display = "block";
-    }catch(error){
+        displayEmployee(
+            employee,
+            assetsData.assets
+        );
+
+    } catch(error) {
+
         console.error(error);
+
         alert("Unable to communicate with the server.");
     }
 }
 
-// Display employee information
-function displayEmployee(employee, assets){
 
-    const detailsContainer = document.getElementById(
-        `employee-details-${employee.id}`
-    );
+// Display employee information
+function displayEmployee(employee, assets) {
+
+    const detailsContainer =
+        document.getElementById(
+            `employee-details-${employee.id}`
+        );
 
     let assetsHTML = "";
 
+
     if (assets.length === 0) {
+
         assetsHTML = `
-            <p>No assets assigned.</p>
+            <div class="employee-empty-state">
+                No assets assigned.
+            </div>
         `;
+
     } else {
 
-        assets.forEach(function(asset){
+        assets.forEach(function(asset) {
+
             assetsHTML += `
                 <div class="employee-asset">
-                    <p><strong>${asset.asset_tag}</strong></p>
-                    <p>Type: ${asset.asset_type}</p>
-                    <p>Manufacturer: ${asset.manufacturer}</p>
-                    <p>Serial Number: ${asset.serial_number}</p>
+
+                    <div class="employee-asset-header">
+
+                        <strong>
+                            ${asset.asset_tag}
+                        </strong>
+
+                        <span class="employee-asset-status">
+                            ${asset.status || ""}
+                        </span>
+
+                    </div>
+
+                    <div class="employee-asset-grid">
+
+                        <div>
+                            <span class="inline-label">
+                                Type
+                            </span>
+
+                            <span class="inline-value">
+                                ${asset.asset_type || "-"}
+                            </span>
+                        </div>
+
+
+                        <div>
+                            <span class="inline-label">
+                                Manufacturer
+                            </span>
+
+                            <span class="inline-value">
+                                ${asset.manufacturer || "-"}
+                            </span>
+                        </div>
+
+
+                        <div>
+                            <span class="inline-label">
+                                Serial Number
+                            </span>
+
+                            <span class="inline-value">
+                                ${asset.serial_number || "-"}
+                            </span>
+                        </div>
+
+                    </div>
+
                 </div>
             `;
         });
     }
 
+
     detailsContainer.innerHTML = `
-        <h4>Employee Details</h4>
 
-        <p><strong>ID:</strong> ${employee.id}</p>
-        <p><strong>Department:</strong> ${employee.department}</p>
-        <p><strong>Manager:</strong> ${employee.manager || "-"}</p>
-        <p><strong>Start Date:</strong> ${employee.start_date || "-"}</p>
+        <div class="inline-section">
 
-        <h4>Assigned Assets</h4>
+            <span class="inline-section-label">
+                Employee Information
+            </span>
 
-        ${assetsHTML}
+            <div class="employee-info-grid">
 
-        <h4>Assigned Tickets</h4>
+                <div class="employee-info-item">
 
-        <p>Individual ticket assignment not implemented yet.</p>
+                    <span class="inline-label">
+                        Department
+                    </span>
+
+                    <span class="inline-value">
+                        ${employee.department || "-"}
+                    </span>
+
+                </div>
+
+
+                <div class="employee-info-item">
+
+                    <span class="inline-label">
+                        Manager
+                    </span>
+
+                    <span class="inline-value">
+                        ${employee.manager || "-"}
+                    </span>
+
+                </div>
+
+
+                <div class="employee-info-item">
+
+                    <span class="inline-label">
+                        Start Date
+                    </span>
+
+                    <span class="inline-value">
+                        ${employee.start_date || "-"}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="inline-section">
+
+            <span class="inline-section-label">
+                Assigned Assets
+            </span>
+
+            <div class="employee-assets-list">
+                ${assetsHTML}
+            </div>
+
+        </div>
+
+
+        <div class="inline-section">
+
+            <span class="inline-section-label">
+                Assigned Tickets
+            </span>
+
+            <div class="employee-ticket-placeholder">
+                Individual ticket assignment not implemented yet.
+            </div>
+
+        </div>
     `;
 
+
     detailsContainer.style.display = "block";
-}
-
-// Display assigned assets
-function displayEmployeeAssets(assets){
-
-    const assetsContainer = document.getElementById("employee-assets");
-
-    assetsContainer.innerHTML = "";
-
-    if(assets.length === 0){
-        assetsContainer.innerHTML = `
-            <p>No assets assigned.</p>
-        `;
-        return;
-    }
-
-    assets.forEach(function(asset){
-
-        const assetDiv = document.createElement("div");
-
-        assetDiv.classList.add("employee-asset");
-
-        assetDiv.innerHTML = `
-            <p>
-                <strong>${asset.asset_tag}</strong>
-            </p>
-
-            <p>
-                Type: ${asset.asset_type}
-            </p>
-
-            <p>
-                Manufacturer: ${asset.manufacturer}
-            </p>
-
-            <p>
-                Serial Number: ${asset.serial_number}
-            </p>
-
-            <p>
-                Status: ${asset.status}
-            </p>
-
-            <hr>
-        `;
-
-        assetsContainer.appendChild(assetDiv);
-    });
 }

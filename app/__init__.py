@@ -325,6 +325,27 @@ def return_asset_route(asset_id):
 
 ######################################### API ONBOARDING Routes #################################
 
+def add_employee_name_to_onboarding(data):
+
+    if not data:
+        return data
+
+    onboarding = dict(data["onboarding"])
+    employee = get_employee(onboarding["employee_id"])
+
+    if employee:
+        onboarding["employee_name"] = (
+            f"{employee['first_name']} {employee['last_name']}"
+        )
+    else:
+        onboarding["employee_name"] = "Unknown Employee"
+
+    return {
+        "onboarding": onboarding,
+        "tasks": data["tasks"]
+    }
+
+
 @app.route("/employees/<int:employee_id>/onboarding", methods=["POST"])
 def start_employee_onboarding(employee_id):
 
@@ -335,7 +356,10 @@ def start_employee_onboarding(employee_id):
 
     onboarding = get_onboarding_details(onboarding_id)
 
+    onboarding = add_employee_name_to_onboarding(onboarding)
+
     return jsonify(onboarding), 201
+
 
 @app.route("/onboardings/<int:onboarding_id>")
 def get_onboarding_route(onboarding_id):
@@ -345,7 +369,10 @@ def get_onboarding_route(onboarding_id):
     if not onboarding:
         return jsonify({"error": "Onboarding not found"}), 404
 
+    onboarding = add_employee_name_to_onboarding(onboarding)
+
     return jsonify(onboarding)
+
 
 @app.route("/onboarding/tasks/<int:task_id>", methods=["PUT"])
 def update_onboarding_task_route(task_id):
@@ -360,9 +387,10 @@ def update_onboarding_task_route(task_id):
         }), 404
 
     return jsonify({
-        "message":  "Task updated",
+        "message": "Task updated",
         "task_id": task_id
     })
+
 
 @app.route("/onboardings/<int:onboarding_id>/complete", methods=["POST"])
 def complete_onboarding_route(onboarding_id):
@@ -375,6 +403,8 @@ def complete_onboarding_route(onboarding_id):
         }), 400
 
     onboarding = get_onboarding_details(onboarding_id)
+
+    onboarding = add_employee_name_to_onboarding(onboarding)
 
     return jsonify(onboarding)
 

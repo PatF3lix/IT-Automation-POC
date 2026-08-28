@@ -6,10 +6,15 @@
 
     <title>{% block title %}IT Automation POC{% endblock %}</title>
 
+    <!-- Shared styles used by every page -->
     <link
         rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
+        href="{{ url_for('static', filename='css/base.css') }}"
     >
+
+    <!-- Page-specific styles -->
+    {% block styles %}
+    {% endblock %}
 </head>
 
 <body>

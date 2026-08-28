@@ -4,80 +4,214 @@
 Tickets - IT Automation POC
 {% endblock %}
 
+
+{% block styles %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/tickets.css') }}"
+>
+{% endblock %}
+
+
 {% block content %}
 
-<h2>AI Ticket Triage</h2>
+<div class="tickets-header">
+    <h2>AI Ticket Triage</h2>
 
-<div class="card">
-
-    <h3>Create Ticket</h3>
-
-    <form id="ticket-form">
-
-        <label for="employee-id">Employee ID</label>
-        <input
-            type="number"
-            id="employee-id"
-            required
-        >
-
-        <label for="title">Title</label>
-        <input
-            type="text"
-            id="title"
-            required
-        >
-
-        <label for="description">Description</label>
-        <textarea
-            id="description"
-            rows="5"
-            required
-        ></textarea>
-
-        <button type="submit">
-            Create & Analyze Ticket
-        </button>
-
-    </form>
-
+    <p>
+        Create a support ticket and let the local AI analyze
+        its category, priority, team, summary, and recommended actions.
+    </p>
 </div>
 
 
-<div class="card" id="ticket-result" style="display: none;">
+<div class="ticket-layout">
 
-    <h3>AI Triage Result</h3>
+    <!-- Create Ticket -->
+    <div class="card ticket-form-card">
 
-    <p>
-        <strong>Ticket:</strong>
-        <span id="result-ticket-number"></span>
-    </p>
+        <div class="ticket-card-header">
+            <div>
+                <span class="ticket-step">01</span>
+                <h3>Create Ticket</h3>
+            </div>
 
-    <p>
-        <strong>Category:</strong>
-        <span id="result-category"></span>
-    </p>
+            <span class="ai-badge">
+                AI Powered
+            </span>
+        </div>
 
-    <p>
-        <strong>Priority:</strong>
-        <span id="result-priority"></span>
-    </p>
 
-    <p>
-        <strong>Assigned Team:</strong>
-        <span id="result-team"></span>
-    </p>
+        <form id="ticket-form">
 
-    <p>
-        <strong>AI Summary:</strong>
-        <span id="result-summary"></span>
-    </p>
+            <div class="form-group">
+                <label for="employee-id">
+                    Employee ID
+                </label>
 
-    <p>
-        <strong>Recommendations:</strong>
-    </p>
+                <input
+                    type="number"
+                    id="employee-id"
+                    placeholder="e.g. 3"
+                    required
+                >
+            </div>
 
-    <ul id="result-recommendations"></ul>
+
+            <div class="form-group">
+                <label for="title">
+                    Ticket Title
+                </label>
+
+                <input
+                    type="text"
+                    id="title"
+                    placeholder="e.g. Unable to connect to company VPN"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="description">
+                    Description
+                </label>
+
+                <textarea
+                    id="description"
+                    rows="6"
+                    placeholder="Describe the issue, symptoms, and anything already attempted..."
+                    required
+                ></textarea>
+            </div>
+
+
+            <button
+                type="submit"
+                class="analyze-button"
+            >
+                Create & Analyze Ticket
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- AI Loading State -->
+    <div
+        id="ticket-loading"
+        class="ticket-loading"
+        style="display: none;"
+    >
+
+        <div class="loading-spinner"></div>
+
+        <div>
+            <h4>AI analysis in progress...</h4>
+
+            <p>
+                Analyzing ticket category, priority,
+                assigned team, and recommendations.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- AI Result -->
+    <div
+        class="card ticket-result-card"
+        id="ticket-result"
+        style="display: none;"
+    >
+
+        <div class="ticket-card-header">
+
+            <div>
+                <span class="ticket-step">02</span>
+                <h3>AI Triage Result</h3>
+            </div>
+
+            <span class="analysis-badge">
+                Analysis Complete
+            </span>
+
+        </div>
+
+
+        <div class="ticket-number-row">
+
+            <span class="result-label">
+                Ticket
+            </span>
+
+            <span
+                class="ticket-number"
+                id="result-ticket-number"
+            ></span>
+
+        </div>
+
+
+        <div class="result-grid">
+
+            <div class="result-box">
+                <span class="result-label">
+                    Category
+                </span>
+
+                <span
+                    class="result-value"
+                    id="result-category"
+                ></span>
+            </div>
+
+
+            <div class="result-box">
+                <span class="result-label">
+                    Priority
+                </span>
+
+                <span
+                    class="result-value"
+                    id="result-priority"
+                ></span>
+            </div>
+
+
+            <div class="result-box">
+                <span class="result-label">
+                    Assigned Team
+                </span>
+
+                <span
+                    class="result-value"
+                    id="result-team"
+                ></span>
+            </div>
+
+        </div>
+
+
+        <div class="ai-section">
+
+            <h4>AI Summary</h4>
+
+            <p id="result-summary"></p>
+
+        </div>
+
+
+        <div class="ai-section">
+
+            <h4>Recommended Actions</h4>
+
+            <ul id="result-recommendations"></ul>
+
+        </div>
+
+    </div>
 
 </div>
 

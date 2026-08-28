@@ -4,100 +4,242 @@
 Onboarding - IT Automation POC
 {% endblock %}
 
+
+{% block styles %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/onboarding.css') }}"
+>
+{% endblock %}
+
+
 {% block content %}
 
-<h2>Employee Onboarding</h2>
+<div class="onboarding-header">
+    <h2>Employee Onboarding</h2>
 
-
-<!-- START ONBOARDING -->
-<div class="card">
-    <h3>Start Onboarding</h3>
-
-    <form id="start-onboarding-form">
-
-        <label for="onboarding-employee-id">Employee ID</label>
-        <input type="number" id="onboarding-employee-id" required>
-
-        <button type="submit">
-            Start Onboarding
-        </button>
-
-    </form>
+    <p>
+        Start onboarding workflows, track IT setup tasks,
+        and complete the process once all required actions are finished.
+    </p>
 </div>
 
 
-<!-- FIND ONBOARDING -->
-<div class="card">
-    <h3>Find Onboarding</h3>
+<div class="onboarding-actions">
 
-    <form id="find-onboarding-form">
+    <!-- START ONBOARDING -->
+    <div class="card onboarding-action-card">
 
-        <label for="search-onboarding-id">Onboarding ID</label>
-        <input type="number" id="search-onboarding-id" required>
+        <div class="onboarding-card-header">
+            <span class="onboarding-step">01</span>
 
-        <button type="submit">
-            Get Onboarding
-        </button>
+            <div>
+                <h3>Start Onboarding</h3>
+                <p>Create a new IT onboarding workflow for an employee.</p>
+            </div>
+        </div>
 
-    </form>
+        <form id="start-onboarding-form">
+
+            <div class="form-group">
+                <label for="onboarding-employee-id">
+                    Employee ID
+                </label>
+
+                <input
+                    type="number"
+                    id="onboarding-employee-id"
+                    placeholder="e.g. 3"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="start-onboarding-button"
+            >
+                Start Onboarding
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- FIND ONBOARDING -->
+    <div class="card onboarding-action-card">
+
+        <div class="onboarding-card-header">
+            <span class="onboarding-step">02</span>
+
+            <div>
+                <h3>Find Onboarding</h3>
+                <p>Retrieve an existing onboarding workflow and its tasks.</p>
+            </div>
+        </div>
+
+        <form id="find-onboarding-form">
+
+            <div class="form-group">
+                <label for="search-onboarding-id">
+                    Onboarding ID
+                </label>
+
+                <input
+                    type="number"
+                    id="search-onboarding-id"
+                    placeholder="e.g. 3"
+                    required
+                >
+            </div>
+
+            <button type="submit">
+                Get Onboarding
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- COMPLETE ONBOARDING -->
+    <div class="card onboarding-action-card">
+
+        <div class="onboarding-card-header">
+            <span class="onboarding-step">03</span>
+
+            <div>
+                <h3>Complete Onboarding</h3>
+                <p>
+                    Finalize the workflow once every onboarding task
+                    has been completed.
+                </p>
+            </div>
+        </div>
+
+        <form id="complete-onboarding-form">
+
+            <div class="form-group">
+                <label for="complete-onboarding-id">
+                    Onboarding ID
+                </label>
+
+                <input
+                    type="number"
+                    id="complete-onboarding-id"
+                    placeholder="e.g. 3"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="complete-onboarding-button"
+            >
+                Complete Onboarding
+            </button>
+
+        </form>
+
+    </div>
+
 </div>
 
 
 <!-- ONBOARDING DETAILS -->
-<div class="card" id="onboarding-result" style="display: none;">
+<div
+    class="card onboarding-result-card"
+    id="onboarding-result"
+    style="display: none;"
+>
 
-    <h3>Onboarding Details</h3>
+    <div class="onboarding-result-header">
 
-    <p>
-        <strong>Onboarding ID:</strong>
-        <span id="result-onboarding-id"></span>
-    </p>
+        <div>
+            <span class="workflow-label">
+                Workflow Record
+            </span>
 
-    <p>
-        <strong>Employee ID:</strong>
-        <span id="result-employee-id"></span>
-    </p>
+            <h3>Onboarding Details</h3>
+        </div>
 
-    <p>
-        <strong>Status:</strong>
-        <span id="result-onboarding-status"></span>
-    </p>
+        <span
+            class="onboarding-status"
+            id="result-onboarding-status"
+        ></span>
 
-    <p>
-        <strong>Created:</strong>
-        <span id="result-created-at"></span>
-    </p>
+    </div>
 
-    <p>
-        <strong>Completed:</strong>
-        <span id="result-completed-at"></span>
-    </p>
 
-    <hr>
+    <div class="onboarding-details-grid">
 
-    <h3>Onboarding Tasks</h3>
+        <div class="onboarding-detail">
+            <span class="detail-label">
+                Onboarding ID
+            </span>
 
-    <div id="onboarding-tasks"></div>
+            <span
+                class="detail-value"
+                id="result-onboarding-id"
+            ></span>
+        </div>
+
+
+        <div class="onboarding-detail">
+            <span class="detail-label">
+                Employee
+            </span>
+
+            <span
+                class="detail-value"
+                id="result-employee-name"
+            ></span>
+        </div>
+
+
+        <div class="onboarding-detail">
+            <span class="detail-label">
+                Created
+            </span>
+
+            <span
+                class="detail-value"
+                id="result-created-at"
+            ></span>
+        </div>
+
+
+        <div class="onboarding-detail">
+            <span class="detail-label">
+                Completed
+            </span>
+
+            <span
+                class="detail-value"
+                id="result-completed-at"
+            ></span>
+        </div>
+
+    </div>
+
+
+    <div class="tasks-section">
+
+        <div class="tasks-header">
+            <div>
+                <span class="workflow-label">
+                    Automation Tasks
+                </span>
+
+                <h3>Onboarding Tasks</h3>
+            </div>
+        </div>
+
+        <div id="onboarding-tasks"></div>
+
+    </div>
 
 </div>
-
-
-<!-- COMPLETE ONBOARDING -->
-<div class="card">
-    <h3>Complete Onboarding</h3>
-
-    <form id="complete-onboarding-form">
-
-        <label for="complete-onboarding-id">Onboarding ID</label>
-        <input type="number" id="complete-onboarding-id" required>
-
-        <button type="submit">
-            Complete Onboarding
-        </button>
-
-    </form>
-</div>
-
 
 {% endblock %}
 
