@@ -1,5 +1,6 @@
 const loadEmployeesButton = document.getElementById("load-employees-button");
 
+
 // Load all employees
 if (loadEmployeesButton) {
 
@@ -113,7 +114,7 @@ async function toggleEmployee(employeeId) {
 }
 
 
-// Load one employee + assigned assets
+// Load one employee + assigned assets + assigned tickets
 async function loadEmployee(employeeId) {
 
     try {
@@ -144,9 +145,23 @@ async function loadEmployee(employeeId) {
         }
 
 
+        // Assigned tickets
+        const ticketsResponse =
+            await fetch(`/employees/${employeeId}/tickets`);
+
+        const ticketsData =
+            await ticketsResponse.json();
+
+        if (!ticketsResponse.ok) {
+            alert("Unable to load employee tickets");
+            return;
+        }
+
+
         displayEmployee(
             employee,
-            assetsData.assets
+            assetsData.assets,
+            ticketsData.tickets
         );
 
     } catch(error) {
@@ -159,15 +174,16 @@ async function loadEmployee(employeeId) {
 
 
 // Display employee information
-function displayEmployee(employee, assets) {
+function displayEmployee(employee, assets, tickets) {
 
     const detailsContainer =
         document.getElementById(
             `employee-details-${employee.id}`
         );
 
-    let assetsHTML = "";
 
+    // Build assigned assets
+    let assetsHTML = "";
 
     if (assets.length === 0) {
 
@@ -238,6 +254,90 @@ function displayEmployee(employee, assets) {
     }
 
 
+    // Build assigned tickets
+    let ticketsHTML = "";
+
+    if (tickets.length === 0) {
+
+        ticketsHTML = `
+            <div class="employee-empty-state">
+                No tickets assigned.
+            </div>
+        `;
+
+    } else {
+
+        tickets.forEach(function(ticket) {
+
+            ticketsHTML += `
+                <div class="employee-ticket">
+
+                    <div class="employee-ticket-header">
+
+                        <strong>
+                            ${ticket.ticket_number}
+                        </strong>
+
+                        <span class="employee-ticket-status">
+                            ${ticket.status || ""}
+                        </span>
+
+                    </div>
+
+                    <div class="employee-ticket-grid">
+
+                        <div>
+                            <span class="inline-label">
+                                Title
+                            </span>
+
+                            <span class="inline-value">
+                                ${ticket.title || "-"}
+                            </span>
+                        </div>
+
+
+                        <div>
+                            <span class="inline-label">
+                                Category
+                            </span>
+
+                            <span class="inline-value">
+                                ${ticket.category || "-"}
+                            </span>
+                        </div>
+
+
+                        <div>
+                            <span class="inline-label">
+                                Priority
+                            </span>
+
+                            <span class="inline-value">
+                                ${ticket.priority || "-"}
+                            </span>
+                        </div>
+
+
+                        <div>
+                            <span class="inline-label">
+                                Assigned Team
+                            </span>
+
+                            <span class="inline-value">
+                                ${ticket.assigned_team || "-"}
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+        });
+    }
+
+
+    // Display employee details
     detailsContainer.innerHTML = `
 
         <div class="inline-section">
@@ -310,13 +410,12 @@ function displayEmployee(employee, assets) {
                 Assigned Tickets
             </span>
 
-            <div class="employee-ticket-placeholder">
-                Individual ticket assignment not implemented yet.
+            <div class="employee-tickets-list">
+                ${ticketsHTML}
             </div>
 
         </div>
     `;
-
 
     detailsContainer.style.display = "block";
 }
