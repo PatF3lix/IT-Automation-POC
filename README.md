@@ -181,6 +181,12 @@ The POC includes pages for the dashboard, ticket triage, asset management, emplo
 
 The application exposes REST endpoints for employees, tickets, assets, and onboarding workflows. The Postman collection can be used to demonstrate and test the API independently of the web interface.
 
+## API Documentation
+
+Interactive API documentation is available through Postman:
+
+[View the IT Automation POC API Documentation](https://documenter.getpostman.com/view/36331381/2sBYAuSB6a)
+
 ## Docker
 
 A Dockerfile is included to demonstrate how the Flask application can be packaged into a portable container.
