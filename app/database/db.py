@@ -124,17 +124,6 @@ def seed_database():
 
 ######################################### Employees #########################################
 
-def create_employee(first_name, last_name, department, job_title, manager, start_date):
-    connection = get_connection()
-
-    connection.execute(
-        "INSERT INTO employees (first_name,  last_name, department, job_title, manager, start_date) "
-        "VALUES (?, ?, ?, ?, ?, ?)",
-        (first_name, last_name, department, job_title, manager, start_date)
-    )
-    connection.commit()
-    connection.close()
-
 def get_employee(employee_id):
     connection = get_connection()
 
@@ -147,6 +136,30 @@ def get_employee(employee_id):
     connection.close()
 
     return employee
+
+def get_all_employees():
+    connection = get_connection()
+
+    query_result = connection.execute(
+        "SELECT * FROM employees ORDER BY last_name, first_name"
+    )
+
+    employees = query_result.fetchall()
+
+    connection.close()
+
+    return employees
+
+def create_employee(first_name, last_name, department, job_title, manager, start_date):
+    connection = get_connection()
+
+    connection.execute(
+        "INSERT INTO employees (first_name,  last_name, department, job_title, manager, start_date) "
+        "VALUES (?, ?, ?, ?, ?, ?)",
+        (first_name, last_name, department, job_title, manager, start_date)
+    )
+    connection.commit()
+    connection.close()
 
 def update_employee(employee_id, updates):
     connection = get_connection()

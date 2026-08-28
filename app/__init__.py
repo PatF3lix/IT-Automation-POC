@@ -13,7 +13,8 @@ from .database.db import (
     get_asset,
     update_asset,
     delete_asset,
-    get_employee_assets
+    get_employee_assets,
+    get_all_employees
 )
 from .services.onboarding_service import (
     start_onboarding,
@@ -52,12 +53,21 @@ def get_employee_route(employee_id):
         return jsonify({"error": "Employee not found"}), 404
 
     return jsonify({
-        "id": employee["id"],
-        "first_name": employee["first_name"],
-        "last_name": employee["last_name"],
-        "department": employee["department"],
-        "job_title": employee["job_title"]
+    "id": employee["id"],
+    "first_name": employee["first_name"],
+    "last_name": employee["last_name"],
+    "department": employee["department"],
+    "job_title": employee["job_title"],
+    "manager": employee["manager"],
+    "start_date": employee["start_date"],
+    "status": employee["status"]
     })
+
+@app.route("/employees")
+def get_all_employees_route():
+    employees = get_all_employees()
+
+    return jsonify([dict(employee) for employee in employees])
 
 @app.route("/employees/<int:employee_id>/assets")
 def get_employee_assets_route(employee_id):
