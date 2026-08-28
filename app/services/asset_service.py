@@ -1,4 +1,4 @@
-from ..database.db import get_employee, get_asset, update_asset, get_employee_assets
+from ..database import get_employee, get_asset, update_asset, get_employee_assets
 
 def assign_asset(asset_id, employee_id):
     asset = get_asset(asset_id)

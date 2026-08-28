@@ -3,7 +3,7 @@ from flask import render_template
 from flask import Flask, jsonify, request
 from .services.ticket_service import process_ticket
 from .services.asset_service import assign_asset, return_asset
-from .database.db import (
+from .database import (
     get_employee,
     create_ticket,
     get_ticket,

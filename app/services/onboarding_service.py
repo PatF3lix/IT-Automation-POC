@@ -1,5 +1,5 @@
 from datetime import datetime
-from ..database.db import (
+from ..database import (
     get_employee,
     create_onboarding,
     get_onboarding,

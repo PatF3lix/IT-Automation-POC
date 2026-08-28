@@ -1,5 +1,5 @@
 from .ollama_service import analyze_ticket
-from ..database.db import (
+from ..database import (
     get_ticket,
     update_ticket_ai,
     get_employees_by_department,
