@@ -137,6 +137,62 @@ def get_employee(employee_id):
 
     return employee
 
+def get_employee_tickets(employee_id):
+    connection = get_connection()
+
+    query_result = connection.execute(
+        """
+        SELECT * FROM tickets 
+        WHERE assigned_to = ?
+        ORDER BY created_at DESC
+        """,
+        (employee_id, )
+    )
+
+    tickets = query_result.fetchall()
+
+    connection.close()
+
+    return tickets
+
+def get_employee_active_ticket_count(employee_id):
+    connection = get_connection()
+
+    query_result = connection.execute(
+        """
+        SELECT COUNT(*) AS ticket_count
+        FROM tickets
+        WHERE assigned_to = ?
+        AND status NOT IN ('Resolved', 'Closed')
+        """,
+        (employee_id, )
+    )
+
+    result = query_result.fetchone()
+
+    connection.close()
+
+    return result["ticket_count"]
+
+def get_employees_by_department(department):
+    connection = get_connection()
+
+    query_result = connection.execute(
+        """
+        SELECT * FROM employees
+        WHERE LOWER(department) = LOWER(?)
+        ORDER BY last_name, first_name
+        """,
+        (department, )
+    )
+
+    employees = query_result.fetchall()
+
+    connection.close()
+
+    return employees
+
+
 def get_all_employees():
     connection = get_connection()
 
@@ -216,6 +272,21 @@ def delete_employee(employee_id):
 
 ######################################### Tickets #########################################
 
+def get_ticket(ticket_id):
+    connection = get_connection()
+
+    query_result = connection.execute(
+        "SELECT * FROM tickets WHERE id = ?",
+        (ticket_id,)
+    )
+
+    ticket = query_result.fetchone()
+
+    connection.close()
+
+    return ticket
+
+
 def create_ticket(employee_id, title, description):
     connection = get_connection()
 
@@ -247,20 +318,6 @@ def create_ticket(employee_id, title, description):
     connection.close()
 
     return ticket_id
-
-def get_ticket(ticket_id):
-    connection = get_connection()
-
-    query_result = connection.execute(
-        "SELECT * FROM tickets WHERE id = ?",
-        (ticket_id,)
-    )
-
-    ticket = query_result.fetchone()
-
-    connection.close()
-
-    return ticket
 
 def update_ticket(ticket_id, updates):
 
@@ -341,6 +398,26 @@ def delete_ticket(ticket_id):
     connection.close()
 
     return ticket_deleted
+
+def assign_ticket_to_employee(ticket_id, employee_id):
+    connection = get_connection()
+
+    query_result = connection.execute(
+        """
+        UPDATE tickets
+        SET assigned_to = ?
+        WHERE id = ?
+        """,
+        (employee_id, ticket_id)
+    )
+
+    connection.commit()
+
+    ticket_updated = query_result.rowcount > 0
+
+    connection.close()
+
+    return ticket_updated
 
 
 ######################################### IT Assets #########################################

@@ -1,5 +1,12 @@
-from ..database.db import get_ticket, update_ticket_ai
 from .ollama_service import analyze_ticket
+from ..database.db import (
+    get_ticket,
+    update_ticket_ai,
+    get_employees_by_department,
+    get_employee_active_ticket_count,
+    assign_ticket_to_employee
+)
+
 
 def process_ticket(ticket_id):
     ticket = get_ticket(ticket_id)

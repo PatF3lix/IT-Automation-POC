@@ -32,12 +32,14 @@ CREATE TABLE IF NOT EXISTS tickets (
     category TEXT,
     priority TEXT,
     assigned_team TEXT,
+    assigned_to INTEGER,
     status TEXT NOT NULL DEFAULT 'New',
     ai_summary TEXT,
     ai_recommendations TEXT,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (employee_id) REFERENCES employees(id)
+    FOREIGN KEY (employee_id) REFERENCES employees(id),
+    FOREIGN KEY (assigned_to) REFERENCES employees(id)
 );
 
 CREATE TABLE IF NOT EXISTS onboardings (
