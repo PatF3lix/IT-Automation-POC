@@ -6,7 +6,6 @@ from .routes.ticket_routes import ticket_bp
 from .routes.asset_routes import asset_bp
 from .routes.onboarding_routes import onboarding_bp
 
-
 def create_app():
     app = Flask(__name__)
 
